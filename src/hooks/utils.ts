@@ -86,10 +86,16 @@ export const updateMessageInCache = (
 
   const updatedEdges = existingData.messages.edges.map((edge) => {
     if (edge.node.id === updatedMessage.id) {
-      return {
-        ...edge,
-        node: updatedMessage,
-      };
+      const existingUpdatedAt = new Date(edge.node.updatedAt);
+      const newUpdatedAt = new Date(updatedMessage.updatedAt);
+
+      if (newUpdatedAt > existingUpdatedAt) {
+        return {
+          ...edge,
+          node: updatedMessage,
+        };
+      }
+      return edge;
     }
     return edge;
   });
