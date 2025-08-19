@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 
-import { updateMessagesCache } from "./utils";
+import { addMessageToCache } from "./utils";
 import { SEND_MESSAGE } from "../queries/messages";
 
 export const useSendMessage = () => {
@@ -12,7 +12,7 @@ export const useSendMessage = () => {
     {
       update(cache, { data }) {
         if (!data?.sendMessage) return;
-        updateMessagesCache(cache, data.sendMessage);
+        addMessageToCache(cache, data.sendMessage);
       },
       onError: (error) => {
         console.error("Error sending message:", error);

@@ -5,6 +5,7 @@ import cn from "clsx";
 import { MessageSender, type Message } from "../__generated__/resolvers-types";
 import { useGetMessages } from "./hooks/use-get-messages";
 import { useSendMessage } from "./hooks/use-send-message";
+import { useMessageSubscriptions } from "./hooks/use-message-subscriptions";
 
 import css from "./chat.module.css";
 
@@ -31,6 +32,8 @@ export const Chat: React.FC = () => {
   const { messages, loadMoreMessages } = useGetMessages();
   const { messageText, setMessageText, handleSendMessage, sendingMessage } =
     useSendMessage();
+
+  useMessageSubscriptions();
 
   return (
     <div className={css.root}>
