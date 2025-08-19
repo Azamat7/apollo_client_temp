@@ -1,20 +1,11 @@
 import React from "react";
 import { ItemContent, Virtuoso } from "react-virtuoso";
 import cn from "clsx";
-import {
-  MessageSender,
-  MessageStatus,
-  type Message,
-} from "../__generated__/resolvers-types";
-import css from "./chat.module.css";
 
-const temp_data: Message[] = Array.from(Array(30), (_, index) => ({
-  id: String(index),
-  text: `Message number ${index}`,
-  status: MessageStatus.Read,
-  updatedAt: new Date().toISOString(),
-  sender: index % 2 ? MessageSender.Admin : MessageSender.Customer,
-}));
+import { MessageSender, type Message } from "../__generated__/resolvers-types";
+import { useMessages } from "./hooks/use-messages";
+
+import css from "./chat.module.css";
 
 const Item: React.FC<Message> = ({ text, sender }) => {
   return (
@@ -36,10 +27,17 @@ const getItem: ItemContent<Message, unknown> = (_, data) => {
 };
 
 export const Chat: React.FC = () => {
+  const { messages, loadMoreMessages } = useMessages();
+
   return (
     <div className={css.root}>
       <div className={css.container}>
-        <Virtuoso className={css.list} data={temp_data} itemContent={getItem} />
+        <Virtuoso
+          className={css.list}
+          data={messages}
+          itemContent={getItem}
+          endReached={loadMoreMessages}
+        />
       </div>
       <div className={css.footer}>
         <input
