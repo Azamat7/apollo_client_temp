@@ -5,7 +5,7 @@ import { Message } from "../../__generated__/resolvers-types";
 import { GET_MESSAGES } from "../queries/messages";
 import { DEFAULT_PAGE_SIZE, MESSAGES_QUERY_OPTIONS } from "./constants";
 
-export const useMessages = (pageSize: number = DEFAULT_PAGE_SIZE) => {
+export const useGetMessages = (pageSize: number = DEFAULT_PAGE_SIZE) => {
   const { data, loading, fetchMore, error } = useQuery(GET_MESSAGES, {
     variables: { first: pageSize },
     ...MESSAGES_QUERY_OPTIONS,

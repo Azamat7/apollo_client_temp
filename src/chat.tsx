@@ -3,7 +3,8 @@ import { ItemContent, Virtuoso } from "react-virtuoso";
 import cn from "clsx";
 
 import { MessageSender, type Message } from "../__generated__/resolvers-types";
-import { useMessages } from "./hooks/use-messages";
+import { useGetMessages } from "./hooks/use-get-messages";
+import { useSendMessage } from "./hooks/use-send-message";
 
 import css from "./chat.module.css";
 
@@ -27,7 +28,9 @@ const getItem: ItemContent<Message, unknown> = (_, data) => {
 };
 
 export const Chat: React.FC = () => {
-  const { messages, loadMoreMessages } = useMessages();
+  const { messages, loadMoreMessages } = useGetMessages();
+  const { messageText, setMessageText, handleSendMessage, sendingMessage } =
+    useSendMessage();
 
   return (
     <div className={css.root}>
@@ -39,14 +42,18 @@ export const Chat: React.FC = () => {
           endReached={loadMoreMessages}
         />
       </div>
-      <div className={css.footer}>
+      <form className={css.footer} onSubmit={handleSendMessage}>
         <input
           type="text"
           className={css.textInput}
           placeholder="Message text"
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
         />
-        <button>Send</button>
-      </div>
+        <button type="submit" disabled={sendingMessage || !messageText.trim()}>
+          {sendingMessage ? "Sending..." : "Send"}
+        </button>
+      </form>
     </div>
   );
 };
